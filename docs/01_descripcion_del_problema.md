@@ -1,18 +1,23 @@
-# 📄 Documento 01: Descripción del Problema
+# Documento 01: Descripción del Problema
 
-**Proyecto:** Sistema de Validación de Telemetría y Gestión de Drones (POO)  
+**Proyecto:** Sistema de Gestión y Telemetría para Drones  
+**Asignatura:** Algoritmos de Programación Orientada a Objetos  
 **Institución:** Universidad de Medellín  
 
 ---
 
 ## Contexto del Problema
-Una empresa de entregas de última milla mediante **drones** requiere un sistema de software capaz de procesar y validar las tramas de telemetría emitidas por sus dispositivos en tiempo real. 
 
-Este sistema actúa como la primera línea de defensa para identificar y rechazar lecturas erróneas o incoherentes antes de transmitirlas al servidor central de control de tráfico aéreo.
+Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) requiere un módulo de software capaz de recibir, procesar y validar tramas de telemetría en tiempo real.
+
+En operaciones aeronáuticas, la integridad de los datos recibidos de los sensores es fundamental. El software debe actuar como una capa de validación previa que identifique e impida el procesamiento de tramas con datos inconsistentes o fuera de los rangos operacionales permitidos (como niveles inválidos de batería, altitudes fuera de norma o incoherencias entre el estado de los motores y la altitud del dispositivo).
 
 ---
 
-## Características de la Solución
-1. **Validación Aeronáutica de Telemetría:** Verificación de parámetros críticos de vuelo como altitud, batería, coordenadas GPS y coherencia del estado de los motores.
-2. **Filtrado de Errores y Excepciones:** Clasificación de entradas fuera de norma mediante excepciones de dominio personalizadas.
-3. **Cálculo de Rutas y Distancias:** Integración de la fórmula de Haversine para calcular la distancia ortodrómica real hasta el destino del paquete.
+## Alcance Inicial
+
+El proyecto toma como referencia el ejercicio práctico `ejercicio_1_poo.py` desarrollado previamente en la asignatura. A partir de esa guía inicial, se plantea estructurar un sistema orientado a objetos que responda a los siguientes frentes:
+
+1. **Validación de Telemetría:** Verificación de parámetros de vuelo y disparo de excepciones de dominio ante lecturas erróneas.
+2. **Cálculo de Distancias:** Estimación de distancias ortodrómicas a puntos de destino utilizando la fórmula de Haversine.
+3. **Representación y Formato:** Estructuración de datos legible para operadores de consola y depuración interna.

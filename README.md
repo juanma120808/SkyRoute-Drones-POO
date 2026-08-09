@@ -1,41 +1,36 @@
-# 🛸 Sistema de Validación de Telemetría y Gestión de Drones (POO)
+# Proyecto Final: Sistema de Gestión y Telemetría para Drones
 
-**Asignatura:** Algoritmos de Programación Orientada a Objetos  
-**Docente:** Mario Alejandro Saldarriaga  
-**Grupo:** 62  
-**Institución:** Universidad de Medellín  
+## Información Académica
+* **Asignatura:** Algoritmos de Programación Orientada a Objetos
+* **Institución:** Universidad de Medellín (UDEM)
+* **Docente:** Mario Alejandro Saldarriaga
+* **Grupo:** 62
 
----
-
-## 👥 Integrantes
-* **Alejandro García Jiménez** - T.I. 1021808372
-* **Juan Manuel Pava Higuita** - T.I. 1032015000
-* **Valery Arboleda Ardila** - T.I. 1020116767
-
----
-
-## 📌 Planteamiento e Información del Proyecto
-Este repositorio contiene la propuesta formal y la implementación en Python del proyecto práctico de la materia **Algoritmos de Programación Orientada a Objetos**. 
-
-El proyecto toma como base el procesamiento de telemetría de una **empresa de delivery con drones de última milla**, cuyo objetivo es procesar, validar y filtrar las tramas de datos emitidas por los dispositivos antes de ser enviadas al sistema de control aéreo.
+## Integrantes
+* Alejandro García Jiménez — T.I. 1021808372
+* Juan Manuel Pava Higuita — T.I. 1032015000
+* Valery Arboleda Ardila — T.I. 1020116767
 
 ---
 
-## 📁 Estructura Informativa de la Documentación
+## Planteamiento del Proyecto
+
+El presente proyecto consiste en el análisis, diseño y desarrollo de una aplicación orientada a objetos enfocada en la gestión de telemetría para vehículos aéreos no tripulados (drones) en contextos logísticos.
+
+El punto de partida de esta propuesta toma como guía el ejercicio práctico inicial (`ejercicio_1_poo.py`), en el cual se definieron las reglas básicas de validación de tramas de datos para dispositivos aéreos. A partir de esa base, el proyecto expandirá la solución hacia un sistema más robusto y estructurado, incorporando progresivamente las herramientas y conceptos vistos a lo largo del curso.
+
+---
+
+## Estructura del Repositorio
+
 ```
 SkyRoute-Drones-POO/
-├── README.md                          # Información general del proyecto e integrantes
-├── LICENSE                            # Licencia MIT
-├── .gitignore                         # Configuración de archivos ignorados
-├── docs/                              # Documentación del análisis y modelo del mundo
-│   ├── 01_descripcion_del_problema.md # Planteamiento del problema y contexto de telemetría
-│   ├── 02_requisitos_funcionales.md      # Especificación de requisitos y reglas de negocio
-│   └── 03_modelo_del_mundo_uml.md        # Modelo del mundo y diagrama de clases UML
-└── src/                               # Directorio reservado para la implementación POO
-    └── .gitkeep                       # Estructura limpia para el código fuente
+├── README.md                          # Presentación del proyecto e información académica
+├── LICENSE                            # Licencia del repositorio (MIT)
+├── .gitignore                         # Configuración de archivos ignorados por Git
+├── docs/                              # Documentación de análisis del proyecto
+│   ├── 01_descripcion_del_problema.md # Definición y contexto del problema
+│   ├── 02_requisitos_funcionales.md      # Requisitos y reglas del sistema
+│   └── 03_modelo_del_mundo_uml.md        # Abstracción y diagrama de clases UML
+└── src/                               # Código fuente (en desarrollo)
 ```
-
----
-
-## 📜 Licencia
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más información.
