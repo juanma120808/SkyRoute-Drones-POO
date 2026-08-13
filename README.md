@@ -7,9 +7,9 @@
 * **Grupo:** 62
 
 ## Integrantes
-* Alejandro García Jiménez — T.I. 1021808372
-* Juan Manuel Pava Higuita — T.I. 1032015000
-* Valery Arboleda Ardila — T.I. 1020116767
+* Alejandro García Jiménez 
+* Juan Manuel Pava Higuita
+* Valery Arboleda Ardila
 
 ---
 
