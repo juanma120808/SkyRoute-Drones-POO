@@ -8,7 +8,8 @@
 
 ## 1. Comprensión del Mundo del Problema
 
-El modelo del mundo recopila los elementos identificados a partir del ejercicio base `ejercicio_1_poo.py`:
+El modelo del mundo recopila los elementos identificados para la capa inicial de telemetría y validación del sistema (`src/telemetria_drone.py`):
+
 
 ### Entidades y Sus Características (Atributos)
 1. **`TelemetriaDrone`**: Representa la entidad concreta del dron operando.

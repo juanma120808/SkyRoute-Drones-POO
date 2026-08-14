@@ -15,13 +15,14 @@ En operaciones aeronáuticas, la integridad de los datos recibidos de los sensor
 
 ---
 
-## 2. Historial de Desarrollo y Punto de Partida
+## 2. Historial de Desarrollo y Arquitectura Incremental
 
-1. **Ejercicio Base de Referencia (`ejercicio_1_poo.py`):** El proyecto parte formalmente del ejercicio práctico inicial realizado en clase, el cual resolvió la validación atómica de la trama de telemetría de un dron individual (`TelemetriaDrone`) y la gestión de sus excepciones de dominio.
-2. **Entregable 1 - Fase de Análisis del Problema:** Conforme a la metodología impartida en la asignatura (basada en el documento *Etapa de Análisis del Problema* y el *Caso de Estudio Tienda de Libros*), este primer entregable consolida estrictamente la fase de **Análisis**:
-   - Requisitos Funcionales estructurados en formato de tabla (Nombre, Resumen, Entradas, Resultado).
-   - Reglas de Negocio claras e inequívocas.
+1. **Módulo de Validación de Telemetría (`src/telemetria_drone.py`):** El proyecto establece como núcleo operacional inicial la validación atómica de las tramas de telemetría de un dron individual (`TelemetriaDrone`) y la gestión de sus excepciones de dominio.
+2. **Entregable 1 - Fase de Análisis del Problema:** Conforme a la metodología del curso, este primer entregable consolida la etapa formal de **Análisis**:
+   - Requisitos Funcionales estructurados en formato estándar (Nombre, Resumen, Entradas, Resultado).
+   - Reglas de Negocio claras e inequívocas de la operación aérea.
    - Comprensión del Mundo del Problema (identificación de entidades, atributos y relaciones).
-   - Asignación de responsabilidades de cada clase.
-3. **Perspectiva de Evolución (Futuras Entregas):** El diseño actual se mantiene fiel a lo verificado (ejercicio base), sentando la base para que en entregas posteriores se extienda el dominio (ej. gestión de flotas, planes de vuelo, carritos de paquetes/entregas) a medida que se definan en clase sus entidades, propiedades y funciones.
+   - Asignación formal de responsabilidades de cada clase.
+3. **Perspectiva de Evolución Incremental:** El diseño actual consolida las reglas del componente de telemetría, sentando las bases para incorporar en las siguientes entregas nuevas entidades y módulos del sistema (tales como gestión de flotas, planificación de rutas y control de envíos).
+
 

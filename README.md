@@ -17,7 +17,8 @@
 
 El presente proyecto consiste en el análisis, diseño y desarrollo de una aplicación orientada a objetos enfocada en la gestión de telemetría para vehículos aéreos no tripulados (drones) en contextos logísticos.
 
-El punto de partida de esta propuesta toma como guía el ejercicio práctico inicial (`ejercicio_1_poo.py`), en el cual se definieron las reglas básicas de validación de tramas de datos para dispositivos aéreos. A partir de esa base, el proyecto expandirá la solución hacia un sistema más robusto y estructurado, incorporando progresivamente las herramientas y conceptos vistos a lo largo del curso.
+El sistema parte del desarrollo del módulo central de procesamiento y validación de telemetría (`src/telemetria_drone.py`), en el cual se definen las reglas de negocio de validación de tramas de datos para dispositivos aéreos. A partir de este núcleo operacional, la solución se expandirá hacia una arquitectura orientada a objetos más robusta e integral, incorporando progresivamente nuevos componentes a lo largo del desarrollo del proyecto.
+
 
 ---
 

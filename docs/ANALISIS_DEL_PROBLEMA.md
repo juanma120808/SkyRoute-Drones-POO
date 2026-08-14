@@ -16,9 +16,10 @@ Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas
 
 En operaciones aeronáuticas de drones, la integridad de los datos reportados por los sensores en tiempo real es crítica. El software actúa como la primera línea de defensa para identificar y rechazar tramas inconsistentes o fuera de normas operacionales (tales como niveles de batería erróneos, altitudes prohibidas o incoherencias entre la altitud del dron y el estado de sus motores) antes de transmitir la información al servidor de control aéreo.
 
-### 1.2 Historial y Evolución (Punto de Partida)
-- **Base Técnica Actual:** El proyecto se construye sobre la solución técnica verificada en el ejercicio base `ejercicio_1_poo.py`.
-- **Enfoque Actual (Fase de Análisis):** Organización y formalización de toda la teoría de Análisis de Problemas enseñada en la clase de POO, estableciendo los cimientos para las entregas futuras sin presuponer estructuras avanzadas aún no definidas en el modelo de dominio.
+### 1.2 Historial y Evolución Incremental
+- **Módulo de Dominio Inicial:** El proyecto se construye sobre el módulo de telemetría y validación operacional (`src/telemetria_drone.py`), el cual establece las bases de encapsulamiento y coherencia aeronáutica.
+- **Enfoque Actual (Fase de Análisis):** Organización y formalización de toda la metodología de Análisis de Problemas de POO, estableciendo la estructura requerida para los componentes actuales y sentando las bases para las ampliaciones del sistema.
+
 
 ---
 
