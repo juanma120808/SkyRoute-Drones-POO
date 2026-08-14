@@ -1,12 +1,13 @@
-# Documento 01: Descripción del Problema
+# Documento 01: Descripción e Historial del Problema
 
-**Proyecto:** Sistema de Gestión y Telemetría para Drones  
+**Proyecto:** SkyRoute - Sistema de Gestión y Telemetría para Drones  
 **Asignatura:** Algoritmos de Programación Orientada a Objetos  
-**Institución:** Universidad de Medellín  
+**Institución:** Universidad de Medellín (UDEM)  
+**Semestre:** 2026-2  
 
 ---
 
-## Contexto del Problema
+## 1. Contexto del Problema
 
 Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) requiere un módulo de software capaz de recibir, procesar y validar tramas de telemetría en tiempo real.
 
@@ -14,10 +15,13 @@ En operaciones aeronáuticas, la integridad de los datos recibidos de los sensor
 
 ---
 
-## Alcance Inicial
+## 2. Historial de Desarrollo y Punto de Partida
 
-El proyecto toma como referencia el ejercicio práctico `ejercicio_1_poo.py` desarrollado previamente en la asignatura. A partir de esa guía inicial, se plantea estructurar un sistema orientado a objetos que responda a los siguientes frentes:
+1. **Ejercicio Base de Referencia (`ejercicio_1_poo.py`):** El proyecto parte formalmente del ejercicio práctico inicial realizado en clase, el cual resolvió la validación atómica de la trama de telemetría de un dron individual (`TelemetriaDrone`) y la gestión de sus excepciones de dominio.
+2. **Entregable 1 - Fase de Análisis del Problema:** Conforme a la metodología impartida en la asignatura (basada en el documento *Etapa de Análisis del Problema* y el *Caso de Estudio Tienda de Libros*), este primer entregable consolida estrictamente la fase de **Análisis**:
+   - Requisitos Funcionales estructurados en formato de tabla (Nombre, Resumen, Entradas, Resultado).
+   - Reglas de Negocio claras e inequívocas.
+   - Comprensión del Mundo del Problema (identificación de entidades, atributos y relaciones).
+   - Asignación de responsabilidades de cada clase.
+3. **Perspectiva de Evolución (Futuras Entregas):** El diseño actual se mantiene fiel a lo verificado (ejercicio base), sentando la base para que en entregas posteriores se extienda el dominio (ej. gestión de flotas, planes de vuelo, carritos de paquetes/entregas) a medida que se definan en clase sus entidades, propiedades y funciones.
 
-1. **Validación de Telemetría:** Verificación de parámetros de vuelo y disparo de excepciones de dominio ante lecturas erróneas.
-2. **Cálculo de Distancias:** Estimación de distancias ortodrómicas a puntos de destino utilizando la fórmula de Haversine.
-3. **Representación y Formato:** Estructuración de datos legible para operadores de consola y depuración interna.

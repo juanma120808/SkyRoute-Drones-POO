@@ -1,51 +1,103 @@
-# Documento 03: Modelo del Mundo y Diagrama UML
+# Documento 03: Modelo del Mundo, Responsabilidades y Diagrama UML
 
-**Proyecto:** Sistema de Gestión y Telemetría para Drones  
+**Proyecto:** SkyRoute - Sistema de Gestión y Telemetría para Drones  
 **Asignatura:** Algoritmos de Programación Orientada a Objetos  
-**Institución:** Universidad de Medellín  
+**Institución:** Universidad de Medellín (UDEM)  
 
 ---
 
-## Modelo del Mundo
+## 1. Comprensión del Mundo del Problema
 
-El **Modelo del Mundo** representa las entidades abstraídas a partir del problema propuesto en el ejercicio base `ejercicio_1_poo.py`:
+El modelo del mundo recopila los elementos identificados a partir del ejercicio base `ejercicio_1_poo.py`:
 
-### Entidades y Jerarquía de Clases
+### Entidades y Sus Características (Atributos)
+1. **`TelemetriaDrone`**: Representa la entidad concreta del dron operando.
+   - `id_dron` (`str`): Identificador único alfanumérico.
+   - `bateria` (`float`): Nivel de batería $[0.0, 100.0]\%$.
+   - `altitud` (`float`): Altura sobre el suelo $[0.0, 120.0]\,m$.
+   - `estado_motores` (`str`): Estado del sistema de propulsión (`'APAGADOS'`, `'STANDBY'`, `'EN_VUELO'`, `'EMERGENCIA'`).
+   - `coordenadas` (`tuple[float, float]`): Posición geográfica $(\text{latitud}, \text{longitud})$.
 
-1. **`TelemetriaDrone`**: Clase encargada de encapsular el estado de vuelo y lecturas de sensores de un dispositivo.
-   - **Atributos:** Identificador del dron, nivel de batería, altitud actual, estado de motores y coordenadas de posición.
-   - **Comportamiento:** Control de acceso mediante encapsulamiento, verificación de coherencia de estado y cálculo de distancia relativa (Haversine).
-
-2. **Excepciones de Dominio**:
-   - `TelemetriaError`: Excepción general para inconsistencias de telemetría.
-   - `BateriaInvalidaError`: Excepción especializada para lecturas fuera de porcentaje permitido.
-   - `AltitudInvalidaError`: Excepción especializada para lecturas fuera de límites normativos.
+2. **Jerarquía de Excepciones de Dominio**:
+   - `TelemetriaError`: Excepción genérica de telemetría (hereda de `ValueError`).
+   - `BateriaInvalidaError`, `AltitudInvalidaError`, `EstadoMotorInvalidoError`, `CoordenadaInvalidaError`: Excepciones específicas de validación.
 
 ---
 
-## Diagrama de Clases UML (Modelo Preliminar)
+## 2. Asignación de Responsabilidades
+
+### **Clase: `TelemetriaDrone`**
+* **Responsabilidades:**
+  1. Representar el estado instantáneo de la telemetría del dron.
+  2. Garantizar la validez de sus atributos mediante encapsulamiento estricto.
+  3. Validar la coherencia aeronáutica entre altitud y motores.
+  4. Calcular la distancia ortodrómica a un destino geográfico (Fórmula de Haversine).
+  5. Proporcionar representaciones de texto legibles (`__str__` y `__repr__`).
+* **Colaboradores:** Ninguno por el momento (Entidad atómica preliminar).
+* **Información que Administra:** `_id_dron`, `_bateria`, `_altitud`, `_estado_motores`, `_coordenadas`.
+
+### **Clases: Excepciones de Dominio**
+* **Responsabilidades:** Interrumpir la ejecución y notificar errores específicos de negocio con mensajes claros.
+* **Colaboradores:** `ValueError` (Librería estándar).
+* **Información que Administra:** `message` (cadena descriptiva de la falla).
+
+---
+
+## 3. Relación entre Responsabilidades y Requisitos Funcionales
+
+| Requerimiento Funcional | Entidades Responsables | Mecanismo de Implementación |
+|---|---|---|
+| **R1. Validar e Instanciar Trama** | `TelemetriaDrone` | Setters decorados (`@property`) y `__init__` |
+| **R2. Notificar Excepciones** | Excepciones de Dominio | `raise` en los setters ante violaciones de regla |
+| **R3. Calcular Distancia** | `TelemetriaDrone` | Método `calcular_distancia_a_punto(destino)` |
+| **R4. Consultar Formato** | `TelemetriaDrone` | Métodos dunder `__str__()` y `__repr__()` |
+
+---
+
+## 4. Diagrama de Clases UML (Modelo Conceptual)
 
 ```mermaid
 classDiagram
     class TelemetriaError {
+        +__init__(message: str)
     }
 
     class BateriaInvalidaError {
+        +__init__(message: str)
     }
 
     class AltitudInvalidaError {
+        +__init__(message: str)
+    }
+
+    class EstadoMotorInvalidoError {
+        +__init__(message: str)
+    }
+
+    class CoordenadaInvalidaError {
+        +__init__(message: str)
     }
 
     class TelemetriaDrone {
-        -_drone_id: str
-        -_bateria: float
-        -_altitud: float
-        -_estado_motores: str
-        -_coordenadas: tuple
-        +validar_coherencia_estado() bool
-        +calcular_distancia_haversine(destino) float
+        -id_dron: str
+        -bateria: float
+        -altitud: float
+        -estado_motores: str
+        -coordenadas: tuple~float, float~
+        +id_dron() str
+        +bateria() float
+        +altitud() float
+        +estado_motores() str
+        +coordenadas() tuple~float, float~
+        +calcular_distancia_a_punto(destino: tuple) float
+        +__str__() str
+        +__repr__() str
     }
 
+    ValueError <|-- TelemetriaError
     TelemetriaError <|-- BateriaInvalidaError
     TelemetriaError <|-- AltitudInvalidaError
+    TelemetriaError <|-- EstadoMotorInvalidoError
+    TelemetriaError <|-- CoordenadaInvalidaError
 ```
+
