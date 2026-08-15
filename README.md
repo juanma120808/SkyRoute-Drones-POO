@@ -16,35 +16,18 @@
 
 ---
 
-## 📌 Planteamiento del Problema
-En operaciones de logística y transporte con drones, la precisión y validez de los datos de telemetría emitidos por los sensores es fundamental. 
-
-Este proyecto implementa el módulo central de telemetría (**SkyRoute**), el cual procesa y valida en tiempo real las tramas de vuelo para asegurar que los datos cumplan con las restricciones físicas y la normativa aeronáutica antes de ser procesados por los sistemas de control.
-
-### 🛡️ Reglas de Negocio Implementadas
-1. **Identificador del Dron (`id_dron`):** Cadena de texto no vacía.
-2. **Nivel de Batería (`bateria`):** Porcentaje delimitado estrictamente en el rango $[0.0, 100.0]\%$.
-3. **Límite de Altitud (`altitud`):** Altura en metros sobre el suelo en el rango $[0.0, 120.0]\,m$ (techo aeronáutico legal).
-4. **Coherencia de Motores vs Altitud:**
-   - Si $\text{altitud} > 0.0\,m \implies \text{estado\_motores}$ debe ser `'EN_VUELO'`.
-   - Si $\text{altitud} == 0.0\,m \implies \text{estado\_motores}$ debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`.
-   - Los estados válidos para los motores son estrictamente: `{'APAGADOS', 'STANDBY', 'EN_VUELO', 'EMERGENCIA'}`.
-5. **Coordenadas Geográficas (`coordenadas`):** Tupla `(latitud, longitud)` dentro de los rangos válidos $[-90.0, 90.0]$ y $[-180.0, 180.0]$.
-6. **Cálculo de Distancia a Destino:** Cálculo de distancia ortodrómica en kilómetros utilizando la **Fórmula de Haversine** ($R = 6371.0\,km$).
-
----
-
 ## 📂 Estructura del Proyecto
 
 ```
 SkyRoute-Drones-POO/
 ├── docs/                             # Documentación formal de análisis (Metodología UDEM)
-│   ├── 01_descripcion_del_problema.md# Contexto del problema
+│   ├── 01_descripcion_del_problema.md# Contexto del problema y planteamiento
 │   ├── 02_requisitos_funcionales.md  # Requisitos Funcionales y Reglas de Negocio
 │   ├── 03_modelo_del_mundo_uml.md    # Entidades y Diagrama de Clases UML
 │   └── ANALISIS_DEL_PROBLEMA.md      # Documento consolidado del Entregable 1
 │
 ├── src/                              # Código fuente del sistema
+│   ├── README.md                     # Guía de arquitectura y uso de paquetes
 │   ├── __init__.py                   # Exportaciones del paquete
 │   ├── exceptions.py                 # Jerarquía de Excepciones de Dominio
 │   ├── telemetria.py                 # Clase TelemetriaDrone (Propiedades y Setters)
@@ -63,6 +46,16 @@ SkyRoute-Drones-POO/
 ├── LICENSE                           # Licencia MIT
 └── README.md                         # Este documento
 ```
+
+---
+
+## 📖 Documentación y Análisis
+
+El análisis formal del problema, los requisitos funcionales, las reglas de negocio y el diagrama de clases UML se encuentran documentados en el directorio [`docs/`](docs/):
+* **[01_descripcion_del_problema.md](docs/01_descripcion_del_problema.md):** Planteamiento y contexto de la operación con drones.
+* **[02_requisitos_funcionales.md](docs/02_requisitos_funcionales.md):** Requisitos RF-01 a RF-04 y restricciones de dominio.
+* **[03_modelo_del_mundo_uml.md](docs/03_modelo_del_mundo_uml.md):** Entidades, asignación de responsabilidades y diagrama UML en Mermaid.
+* **[ANALISIS_DEL_PROBLEMA.md](docs/ANALISIS_DEL_PROBLEMA.md):** Documento maestro consolidado para el Entregable 1.
 
 ---
 
