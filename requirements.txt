@@ -1,5 +1,3 @@
 # Dependencias de Desarrollo y Testing
-# El proyecto utiliza 100% Python Standard Library para la lógica de dominio.
-# Herramientas opcionales de calidad:
 pytest>=7.0.0
 flake8>=6.0.0
