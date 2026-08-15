@@ -4,25 +4,28 @@
 **Asignatura:** Algoritmos de Programación Orientada a Objetos  
 **Institución:** Universidad de Medellín (UDEM)  
 **Semestre:** 2026-2  
+**Docente:** Mario Alejandro Saldarriaga (Grupo 62)  
+**Equipo:** Alejandro García Jiménez, Juan Manuel Pava Higuita, Valery Arboleda Ardila  
 
 ---
 
 ## 1. Contexto del Problema
 
-Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) requiere un módulo de software capaz de recibir, procesar y validar tramas de telemetría en tiempo real.
+Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) para entregas de última milla requiere un módulo de software de alta confiabilidad capaz de recibir, procesar y validar tramas de telemetría emitidas en tiempo real por los sensores a bordo.
 
-En operaciones aeronáuticas, la integridad de los datos recibidos de los sensores es fundamental. El software debe actuar como una capa de validación previa que identifique e impida el procesamiento de tramas con datos inconsistentes o fuera de los rangos operacionales permitidos (como niveles inválidos de batería, altitudes fuera de norma o incoherencias entre el estado de los motores y la altitud del dispositivo).
+En operaciones aeronáuticas civiles y logísticas, la integridad de los datos reportados es crítica para la seguridad del espacio aéreo. El módulo **SkyRoute Telemetry Core** opera como la primera línea de defensa antes de transmitir la información al centro de control de tráfico aéreo. Su misión es detectar y rechazar inmediatamente tramas corruptas, fuera de norma legal o físicamente contradictorias (como altitudes superiores al techo permitido o motores apagados cuando el dron se encuentra a gran altura).
 
 ---
 
 ## 2. Historial de Desarrollo y Arquitectura Incremental
 
-1. **Módulo de Validación de Telemetría (`src/telemetria_drone.py`):** El proyecto establece como núcleo operacional inicial la validación atómica de las tramas de telemetría de un dron individual (`TelemetriaDrone`) y la gestión de sus excepciones de dominio.
-2. **Entregable 1 - Fase de Análisis del Problema:** Conforme a la metodología del curso, este primer entregable consolida la etapa formal de **Análisis**:
-   - Requisitos Funcionales estructurados en formato estándar (Nombre, Resumen, Entradas, Resultado).
-   - Reglas de Negocio claras e inequívocas de la operación aérea.
-   - Comprensión del Mundo del Problema (identificación de entidades, atributos y relaciones).
-   - Asignación formal de responsabilidades de cada clase.
-3. **Perspectiva de Evolución Incremental:** El diseño actual consolida las reglas del componente de telemetría, sentando las bases para incorporar en las siguientes entregas nuevas entidades y módulos del sistema (tales como gestión de flotas, planificación de rutas y control de envíos).
-
-
+1. **Fase 1 - Core de Dominio y Validaciones:** Implementación inicial de la entidad de telemetría (`src/telemetria.py`), jerarquía de excepciones (`src/exceptions.py`) y cálculo geodésico de Haversine (`src/utils/geodesia.py`).
+2. **Fase 2 - Blindaje de Invariantes y Tipos:**
+   - **Validación cruzada bidireccional:** Garantiza que la coherencia entre altitud y estado de motores se preserve tanto en la instanciación inicial como en mutaciones posteriores (`altitud > 0` $\iff$ `motores == EN_VUELO`).
+   - **Exclusión estricta de booleanos:** Previene que valores `bool` pasen como números válidos en las propiedades de negocio.
+3. **Fase 3 - Análisis Formal y Modelo del Mundo (Entregable 1):** Consolidación metodológica conforme a la rúbrica oficial de la UDEM:
+   - Requisitos Funcionales normalizados (R1, R2, R3, R4).
+   - Reglas de Negocio claras e inequívocas.
+   - Comprensión del Mundo del Problema y Asignación de Responsabilidades.
+   - Diagrama de Clases UML en Mermaid con relaciones de herencia y dependencia.
+   - Suite de 20 pruebas unitarias automatizadas (`tests/`).

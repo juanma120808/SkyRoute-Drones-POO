@@ -8,91 +8,106 @@
 
 ## 1. Comprensión del Mundo del Problema
 
-El modelo del mundo recopila los elementos identificados para la capa inicial de telemetría y validación del sistema (`src/telemetria_drone.py`):
+El modelo del dominio abstrae los elementos esenciales para la operación y validación de las tramas de vuelo:
 
+### 1.1 Entidades y Características (Atributos)
 
-### Entidades y Sus Características (Atributos)
-1. **`TelemetriaDrone`**: Representa la entidad concreta del dron operando.
-   - `id_dron` (`str`): Identificador único alfanumérico.
-   - `bateria` (`float`): Nivel de batería $[0.0, 100.0]\%$.
-   - `altitud` (`float`): Altura sobre el suelo $[0.0, 120.0]\,m$.
-   - `estado_motores` (`str`): Estado del sistema de propulsión (`'APAGADOS'`, `'STANDBY'`, `'EN_VUELO'`, `'EMERGENCIA'`).
-   - `coordenadas` (`tuple[float, float]`): Posición geográfica $(\text{latitud}, \text{longitud})$.
+1. **`TelemetriaDrone` (Entidad de Dominio Principal):**
+   - `id_dron` (`str`): Identificador único de la aeronave.
+   - `bateria` (`float`): Nivel porcentual de carga $[0.0, 100.0]\%$.
+   - `altitud` (`float`): Elevación en metros $[0.0, 120.0]\,m$.
+   - `estado_motores` (`str`): Estado operacional (`'APAGADOS'`, `'STANDBY'`, `'EN_VUELO'`, `'EMERGENCIA'`).
+   - `coordenadas` (`tuple[float, float]`): Par geográfico $(\text{latitud}, \text{longitud})$.
 
-2. **Jerarquía de Excepciones de Dominio**:
-   - `TelemetriaError`: Excepción genérica de telemetría (hereda de `ValueError`).
-   - `BateriaInvalidaError`, `AltitudInvalidaError`, `EstadoMotorInvalidoError`, `CoordenadaInvalidaError`: Excepciones específicas de validación.
+2. **`CalculadorGeodesico` (Componente de Utilidad y Cálculo):**
+   - `RADIO_TIERRA_KM` (`float = 6371.0`): Constante del radio terrestre.
+   - `RANGOS_LATITUD` (`tuple = (-90.0, 90.0)`): Límites de latitud.
+   - `RANGOS_LONGITUD` (`tuple = (-180.0, 180.0)`): Límites de longitud.
+
+3. **Jerarquía de Excepciones de Dominio:**
+   - `TelemetriaError` $\rightarrow$ Hereda de `ValueError`.
+     - `BateriaInvalidaError`
+     - `AltitudInvalidaError`
+     - `EstadoMotorInvalidoError`
+     - `CoordenadaInvalidaError`
 
 ---
 
 ## 2. Asignación de Responsabilidades
 
-### **Clase: `TelemetriaDrone`**
-* **Responsabilidades:**
-  1. Representar el estado instantáneo de la telemetría del dron.
-  2. Garantizar la validez de sus atributos mediante encapsulamiento estricto.
-  3. Validar la coherencia aeronáutica entre altitud y motores.
-  4. Calcular la distancia ortodrómica a un destino geográfico (Fórmula de Haversine).
-  5. Proporcionar representaciones de texto legibles (`__str__` y `__repr__`).
-* **Colaboradores:** Ninguno por el momento (Entidad atómica preliminar).
-* **Información que Administra:** `_id_dron`, `_bateria`, `_altitud`, `_estado_motores`, `_coordenadas`.
-
-### **Clases: Excepciones de Dominio**
-* **Responsabilidades:** Interrumpir la ejecución y notificar errores específicos de negocio con mensajes claros.
-* **Colaboradores:** `ValueError` (Librería estándar).
-* **Información que Administra:** `message` (cadena descriptiva de la falla).
+| Entidad / Clase | Responsabilidades | Colaboradores | Información que Administra |
+|---|---|---|---|
+| **`TelemetriaDrone`** | 1. Encapsular el estado instantáneo del dron.<br>2. Validar cada atributo mediante `@property` y setters.<br>3. Blindar la coherencia de estado física (Altitud vs Motores) en instanciación y mutaciones.<br>4. Delegar cálculos geodésicos a `CalculadorGeodesico`.<br>5. Proveer representaciones formateadas (`__str__`, `__repr__`). | `CalculadorGeodesico`<br>`TelemetriaError` (y subclases) | `_id_dron`: str<br>`_bateria`: float<br>`_altitud`: float<br>`_estado_motores`: str<br>`_coordenadas`: tuple[float, float] |
+| **`CalculadorGeodesico`** | 1. Validar formato y rangos geográficos de tuplas de coordenadas.<br>2. Implementar la fórmula de Haversine para cálculo de distancia ortodrómica. | `CoordenadaInvalidaError` | `RADIO_TIERRA_KM`: float<br>`RANGOS_LATITUD`: tuple<br>`RANGOS_LONGITUD`: tuple |
+| **Excepciones de Dominio** | 1. Interrumpir de forma controlada la ejecución ante violaciones de regla.<br>2. Generar mensajes claros con el valor y tipo de error detectado. | `ValueError` | `message`: str |
 
 ---
 
-## 3. Relación entre Responsabilidades y Requisitos Funcionales
+## 3. Matriz de Trazabilidad (Requisitos vs Software)
 
-| Requerimiento Funcional | Entidades Responsables | Mecanismo de Implementación |
+| Requisito Funcional | Entidad Responsable | Método / Mecanismo de Implementación |
 |---|---|---|
-| **R1. Validar e Instanciar Trama** | `TelemetriaDrone` | Setters decorados (`@property`) y `__init__` |
-| **R2. Notificar Excepciones** | Excepciones de Dominio | `raise` en los setters ante violaciones de regla |
-| **R3. Calcular Distancia** | `TelemetriaDrone` | Método `calcular_distancia_a_punto(destino)` |
-| **R4. Consultar Formato** | `TelemetriaDrone` | Métodos dunder `__str__()` y `__repr__()` |
+| **RF-01** (Validar e Instanciar) | `TelemetriaDrone` | Setters decorados (`@property`), validaciones atómicas y `__init__` |
+| **RF-02** (Excepciones de Dominio) | `TelemetriaError` y subclases | Instrucciones `raise` en los setters de validación |
+| **RF-03** (Calcular Distancia) | `TelemetriaDrone` / `CalculadorGeodesico` | `TelemetriaDrone.calcular_distancia_a_punto()` $\rightarrow$ `CalculadorGeodesico.calcular_haversine()` |
+| **RF-04** (Inspección en Consola) | `TelemetriaDrone` | Métodos dunder `__str__()` y `__repr__()` |
 
 ---
 
-## 4. Diagrama de Clases UML (Modelo Conceptual)
+## 4. Diagrama de Clases UML (Mermaid)
 
 ```mermaid
 classDiagram
-    class TelemetriaError {
-        +__init__(message: str)
+    namespace Excepciones_Dominio {
+        class TelemetriaError {
+            +__init__(message: str)
+        }
+        class BateriaInvalidaError {
+            +__init__(message: str)
+        }
+        class AltitudInvalidaError {
+            +__init__(message: str)
+        }
+        class EstadoMotorInvalidoError {
+            +__init__(message: str)
+        }
+        class CoordenadaInvalidaError {
+            +__init__(message: str)
+        }
     }
 
-    class BateriaInvalidaError {
-        +__init__(message: str)
+    namespace Modulo_Geodesia {
+        class CalculadorGeodesico {
+            +RADIO_TIERRA_KM: float = 6371.0
+            +RANGOS_LATITUD: tuple
+            +RANGOS_LONGITUD: tuple
+            +validar_coordenada(coordenada: tuple)$ tuple
+            +calcular_haversine(origen: tuple, destino: tuple)$ float
+        }
     }
 
-    class AltitudInvalidaError {
-        +__init__(message: str)
-    }
-
-    class EstadoMotorInvalidoError {
-        +__init__(message: str)
-    }
-
-    class CoordenadaInvalidaError {
-        +__init__(message: str)
-    }
-
-    class TelemetriaDrone {
-        -id_dron: str
-        -bateria: float
-        -altitud: float
-        -estado_motores: str
-        -coordenadas: tuple~float, float~
-        +id_dron() str
-        +bateria() float
-        +altitud() float
-        +estado_motores() str
-        +coordenadas() tuple~float, float~
-        +calcular_distancia_a_punto(destino: tuple) float
-        +__str__() str
-        +__repr__() str
+    namespace Modulo_Telemetria {
+        class TelemetriaDrone {
+            -id_dron: str
+            -bateria: float
+            -altitud: float
+            -estado_motores: str
+            -coordenadas: tuple~float, float~
+            -initialized: bool
+            +BATERIA_MIN: float = 0.0
+            +BATERIA_MAX: float = 100.0
+            +ALTITUD_MIN: float = 0.0
+            +ALTITUD_MAX: float = 120.0
+            +ESTADOS_VALIDOS: set
+            +id_dron() str
+            +bateria() float
+            +altitud() float
+            +estado_motores() str
+            +coordenadas() tuple~float, float~
+            +calcular_distancia_a_punto(destino: tuple) float
+            +__str__() str
+            +__repr__() str
+        }
     }
 
     ValueError <|-- TelemetriaError
@@ -100,5 +115,8 @@ classDiagram
     TelemetriaError <|-- AltitudInvalidaError
     TelemetriaError <|-- EstadoMotorInvalidoError
     TelemetriaError <|-- CoordenadaInvalidaError
-```
 
+    TelemetriaDrone ..> CalculadorGeodesico : delega cálculo
+    TelemetriaDrone ..> TelemetriaError : lanza ante error
+    CalculadorGeodesico ..> CoordenadaInvalidaError : lanza ante error
+```
