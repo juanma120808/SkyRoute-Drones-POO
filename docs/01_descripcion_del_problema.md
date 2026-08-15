@@ -11,21 +11,16 @@
 
 ## 1. Contexto del Problema
 
-Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) para entregas de última milla requiere un módulo de software de alta confiabilidad capaz de recibir, procesar y validar tramas de telemetría emitidas en tiempo real por los sensores a bordo.
+Una empresa dedicada al transporte y logística mediante drones requiere un módulo de software capaz de recibir, procesar y validar tramas de telemetría emitidas en tiempo real por los sensores a bordo.
 
-En operaciones aeronáuticas civiles y logísticas, la integridad de los datos reportados es crítica para la seguridad del espacio aéreo. El módulo **SkyRoute Telemetry Core** opera como la primera línea de defensa antes de transmitir la información al centro de control de tráfico aéreo. Su misión es detectar y rechazar inmediatamente tramas corruptas, fuera de norma legal o físicamente contradictorias (como altitudes superiores al techo permitido o motores apagados cuando el dron se encuentra a gran altura).
+En operaciones de vuelo, la validez de los datos recibidos es fundamental. El software se encarga de recibir los datos y verificar que cumplan con los rangos permitidos y las restricciones físicas (por ejemplo, que la batería esté en los rangos adecuados, que la altitud no supere los límites legales y que el estado de los motores sea coherente con la altura del dron).
 
 ---
 
-## 2. Historial de Desarrollo y Arquitectura Incremental
+## 2. Historial de Desarrollo y Evolución del Proyecto
 
-1. **Fase 1 - Core de Dominio y Validaciones:** Implementación inicial de la entidad de telemetría (`src/telemetria.py`), jerarquía de excepciones (`src/exceptions.py`) y cálculo geodésico de Haversine (`src/utils/geodesia.py`).
-2. **Fase 2 - Blindaje de Invariantes y Tipos:**
-   - **Validación cruzada bidireccional:** Garantiza que la coherencia entre altitud y estado de motores se preserve tanto en la instanciación inicial como en mutaciones posteriores (`altitud > 0` $\iff$ `motores == EN_VUELO`).
-   - **Exclusión estricta de booleanos:** Previene que valores `bool` pasen como números válidos en las propiedades de negocio.
-3. **Fase 3 - Análisis Formal y Modelo del Mundo (Entregable 1):** Consolidación metodológica conforme a la rúbrica oficial de la UDEM:
-   - Requisitos Funcionales normalizados (R1, R2, R3, R4).
-   - Reglas de Negocio claras e inequívocas.
-   - Comprensión del Mundo del Problema y Asignación de Responsabilidades.
-   - Diagrama de Clases UML en Mermaid con relaciones de herencia y dependencia.
-   - Suite de 20 pruebas unitarias automatizadas (`tests/`).
+1. **Módulo de Telemetría y Validaciones:** Se implementó la clase `TelemetriaDrone` con encapsulamiento estricto (`@property`), validaciones de tipo, control de excepciones de dominio y cálculo de distancias ortodrómicas con la fórmula de Haversine.
+2. **Entregable 1 - Análisis del Problema:** Conforme a la metodología del curso de Algoritmos de POO de la UDEM, se formalizan los siguientes puntos:
+   - Requisitos Funcionales del sistema (RF-01 a RF-04).
+   - Reglas de Negocio claras del dominio aeronáutico.
+   - Modelo del Mundo, asignación de responsabilidades de las clases y Diagrama UML.

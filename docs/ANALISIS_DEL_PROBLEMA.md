@@ -12,16 +12,13 @@
 ## 📋 1. Planteamiento e Historial del Proyecto
 
 ### 1.1 Contexto del Problema
-Una empresa dedicada al transporte y logística mediante aeronaves no tripuladas (drones) para entregas de última milla requiere un módulo de software de alta confiabilidad capaz de recibir, procesar y validar tramas de telemetría emitidas en tiempo real por los sensores a bordo.
+Una empresa dedicada al transporte y logística mediante drones requiere un módulo de software capaz de recibir, procesar y validar tramas de telemetría emitidas en tiempo real por los sensores a bordo.
 
-En operaciones aeronáuticas civiles y logísticas, la integridad de los datos reportados es crítica para la seguridad del espacio aéreo. El módulo **SkyRoute Telemetry Core** opera como la primera línea de defensa antes de transmitir la información al centro de control de tráfico aéreo. Su misión es detectar y rechazar inmediatamente tramas corruptas, fuera de norma legal o físicamente contradictorias.
+En operaciones de vuelo, la validez de los datos recibidos es fundamental. El software se encarga de recibir los datos y verificar que cumplan con los rangos permitidos y las restricciones físicas (por ejemplo, que la batería esté en los rangos adecuados, que la altitud no supere los límites legales y que el estado de los motores sea coherente con la altura del dron).
 
-### 1.2 Historial y Evolución Incremental
-- **Módulo de Dominio Inicial:** Implementación de la entidad de telemetría (`src/telemetria.py`), jerarquía de excepciones (`src/exceptions.py`) y cálculo geodésico de Haversine (`src/utils/geodesia.py`).
-- **Blindaje de Invariantes y Tipos:**
-  - Validación cruzada bidireccional entre altitud y motores.
-  - Exclusión estricta de booleanos en validación de números reales.
-- **Fase de Análisis y Pruebas (Entregable 1):** Formalización de Requisitos Funcionales, Reglas de Negocio, Modelo del Mundo UML y suite de 20 pruebas automatizadas con `unittest`.
+### 1.2 Historial y Evolución del Proyecto
+- **Módulo de Telemetría y Validaciones:** Implementación de la entidad `TelemetriaDrone` (`src/telemetria.py`), jerarquía de excepciones de dominio (`src/exceptions.py`) y cálculo geodésico de Haversine (`src/utils/geodesia.py`).
+- **Fase de Análisis (Entregable 1):** Formalización de Requisitos Funcionales, Reglas de Negocio, Modelo del Mundo y Diagrama de Clases UML.
 
 ---
 
@@ -29,7 +26,7 @@ En operaciones aeronáuticas civiles y logísticas, la integridad de los datos r
 
 | ID | Nombre | Resumen / Actor | Entradas | Resultado Esperado |
 |---|---|---|---|---|
-| **RF-01** | Validar e Instanciar Trama de Telemetría | **Actor:** Sensor / Operador.<br>Recibe los datos de telemetría de un dron, aplica validaciones de tipo, rango y coherencia cruzada, e instanciación del objeto. | `id_dron` (str), `bateria` (float), `altitud` (float), `estado_motores` (str), `coordenadas` (tuple[float, float]) | Objeto `TelemetriaDrone` registrado exitosamente. Si alguna regla de negocio falla, se interrumpe la instanciación. |
+| **RF-01** | Validar e Instanciar Trama de Telemetría | **Actor:** Sensor / Operador.<br>Recibe los datos de telemetría de un dron, aplica validaciones de tipo, rango y coherencia, e instanciación del objeto. | `id_dron` (str), `bateria` (float), `altitud` (float), `estado_motores` (str), `coordenadas` (tuple[float, float]) | Objeto `TelemetriaDrone` registrado exitosamente. Si alguna regla falla, se interrumpe la instanciación. |
 | **RF-02** | Notificar Excepciones de Dominio | **Actor:** Sistema / Operador.<br>Identifica lecturas inconsistentes o fuera de norma y genera excepciones específicas con mensajes descriptivos. | Trama de telemetría o valores inválidos pasados por parámetro | Interrupción controlada y lanzamiento de `BateriaInvalidaError`, `AltitudInvalidaError`, `EstadoMotorInvalidoError` o `CoordenadaInvalidaError`. |
 | **RF-03** | Calcular Distancia Ortodrómica a Destino | **Actor:** Operador de Vuelo.<br>Calcula la distancia geodésica en kilómetros desde la posición actual del dron hacia un punto de destino utilizando la fórmula de Haversine. | `destino` (tuple[float, float]) | Número flotante (`float`) representando la distancia estimada en kilómetros ($km$). |
 | **RF-04** | Consultar Formato de Consola e Inspección Técnica | **Actor:** Operador / Desarrollador.<br>Genera una representación legible del estado del dron para monitoreo (`__str__`) o depuración técnica (`__repr__`). | Instancia de `TelemetriaDrone` | Cadena de texto formateada con la información consolidada. |
@@ -39,14 +36,13 @@ En operaciones aeronáuticas civiles y logísticas, la integridad de los datos r
 ## 📜 3. Reglas de Negocio del Sistema (Restricciones de Dominio)
 
 1. **Identificador Único (`id_dron`):** Cadena alfanumérica no vacía (`str`).
-2. **Nivel de Batería (`bateria`):** Rango strictly delimitado en $[0.0, 100.0]\%$.
-3. **Límite de Altitud (`altitud`):** Medida en metros, restringida por regulación aeronáutica al rango $[0.0, 120.0]\,m$.
+2. **Nivel de Batería (`bateria`):** Rango delimitado en $[0.0, 100.0]\%$.
+3. **Límite de Altitud (`altitud`):** Medida en metros, restringida al rango $[0.0, 120.0]\,m$.
 4. **Coherencia Estado de Motores vs Altitud:**
-   - Si $\text{altitud} > 0.0\,m$, el estado de los motores debe ser obligatoriamente `'EN_VUELO'`.
-   - Si $\text{altitud} == 0.0\,m$, el estado de los motores **no** puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
+   - Si $\text{altitud} > 0.0\,m \implies \text{estado\_motores}$ debe ser obligatoriamente `'EN_VUELO'`.
+   - Si $\text{altitud} == 0.0\,m \implies \text{estado\_motores}$ no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
    - El conjunto de estados válidos es estrictamente: `{'APAGADOS', 'STANDBY', 'EN_VUELO', 'EMERGENCIA'}`.
-   - La coherencia se valida bidireccionalmente ante cualquier mutación.
-5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos flotantes $(\text{latitud}, \text{longitud})$ con $\text{latitud} \in [-90.0, 90.0]$ y $\text{longitud} \in [-180.0, 180.0]$.
+5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos reales $(\text{latitud}, \text{longitud})$ con $\text{latitud} \in [-90.0, 90.0]$ y $\text{longitud} \in [-180.0, 180.0]$.
 
 ---
 
