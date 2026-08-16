@@ -71,15 +71,15 @@ tests/
 ### A. `test_geodesia.py` (Cálculos Geográficos)
 * **`test_coordenada_valida`:** Verifica que una tupla válida `(latitud, longitud)` se acepte correctamente.
 * **`test_coordenada_tipo_invalido`:** Verifica que listas o tuplas con más o menos de 2 elementos sean rechazadas.
-* **`test_coordenada_fuera_de_rango`:** Verifica que latitudes $> 90^\circ$ o $<-90^\circ$ y longitudes fuera de $[-180^\circ, 180^\circ]$ lancen `CoordenadaInvalidaError`.
-* **`test_calculo_haversine_medellin_bogota`:** Calcula la distancia entre Medellín y Bogotá y comprueba que el resultado sea aproximadamente $237.9\,\text{km}$.
-* **`test_calculo_haversine_mismo_punto`:** Verifica que la distancia entre un punto y sí mismo sea exactamente $0.0\,\text{km}$.
+* **`test_coordenada_fuera_de_rango`:** Verifica que latitudes mayores a 90° o menores a -90° y longitudes fuera de `[-180.0°, 180.0°]` lancen `CoordenadaInvalidaError`.
+* **`test_calculo_haversine_medellin_bogota`:** Calcula la distancia entre Medellín y Bogotá y comprueba que el resultado sea aproximadamente 237.9 km.
+* **`test_calculo_haversine_mismo_punto`:** Verifica que la distancia entre un punto y sí mismo sea exactamente 0.0 km.
 
 ### B. `test_telemetria.py` (Validaciones de la Entidad Drone)
 * **Identificador:** Comprueba que no se permitan cadenas vacías (`""` o `"   "`).
-* **Batería:** Comprueba que se acepten valores en $[0.0, 100.0]\%$ y se rechacen valores como `-0.1` o `100.1`.
-* **Altitud:** Comprueba que se acepten valores en $[0.0, 120.0]\,\text{m}$ y se rechacen valores $> 120.0\,\text{m}$ o $< 0.0\,\text{m}$.
-* **Coherencia de Motores vs Altitud:** Comprueba que si la altitud es $> 0$, los motores no puedan ser `STANDBY` ni `APAGADOS`, y que en tierra (`0.0m`) no puedan estar en `EN_VUELO`.
+* **Batería:** Comprueba que se acepten valores en `[0.0, 100.0]%` y se rechacen valores como `-0.1` o `100.1`.
+* **Altitud:** Comprueba que se acepten valores en `[0.0, 120.0] m` y se rechacen valores mayores a 120.0 m o menores a 0.0 m.
+* **Coherencia de Motores vs Altitud:** Comprueba que si la altitud es mayor a 0, los motores no puedan ser `STANDBY` ni `APAGADOS`, y que en tierra (`0.0 m`) no puedan estar en `EN_VUELO`.
 * **Blindaje de Mutaciones:** Comprueba que si el dron ya está creado en tierra y luego se modifica `dron.altitud = 50.0`, el setter rechace el cambio si los motores no se han encendido a `EN_VUELO`.
 * **Métodos Mágicos:** Comprueba que `__str__` y `__repr__` devuelvan el formato legible esperado.
 

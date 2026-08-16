@@ -14,10 +14,10 @@ El modelo del dominio abstrae los elementos esenciales para la operación y vali
 
 1. **`TelemetriaDrone` (Entidad de Dominio Principal):**
    - `id_dron` (`str`): Identificador único de la aeronave.
-   - `bateria` (`float`): Nivel porcentual de carga $[0.0, 100.0]\%$.
-   - `altitud` (`float`): Elevación en metros $[0.0, 120.0]\,m$.
+   - `bateria` (`float`): Nivel porcentual de carga `[0.0, 100.0]%`.
+   - `altitud` (`float`): Elevación en metros `[0.0, 120.0] m`.
    - `estado_motores` (`str`): Estado operacional (`'APAGADOS'`, `'STANDBY'`, `'EN_VUELO'`, `'EMERGENCIA'`).
-   - `coordenadas` (`tuple[float, float]`): Par geográfico $(\text{latitud}, \text{longitud})$.
+   - `coordenadas` (`tuple[float, float]`): Par geográfico `(latitud, longitud)`.
 
 2. **`CalculadorGeodesico` (Componente de Utilidad y Cálculo):**
    - `RADIO_TIERRA_KM` (`float = 6371.0`): Constante del radio terrestre.
@@ -25,7 +25,7 @@ El modelo del dominio abstrae los elementos esenciales para la operación y vali
    - `RANGOS_LONGITUD` (`tuple = (-180.0, 180.0)`): Límites de longitud.
 
 3. **Jerarquía de Excepciones de Dominio:**
-   - `TelemetriaError` $\rightarrow$ Hereda de `ValueError`.
+   - `TelemetriaError` (Hereda de `ValueError`).
      - `BateriaInvalidaError`
      - `AltitudInvalidaError`
      - `EstadoMotorInvalidoError`

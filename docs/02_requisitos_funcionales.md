@@ -9,14 +9,14 @@
 ## 1. Reglas de Negocio del Sistema (Restricciones de Dominio)
 
 1. **Identificador Único (`id_dron`):** Cadena alfanumérica no vacía (`str`). No se permiten espacios en blanco puros.
-2. **Nivel de Batería (`bateria`):** Número real en porcentaje delimitado estrictamente en $[0.0, 100.0]\%$.
-3. **Límite de Altitud (`altitud`):** Medida en metros sobre el nivel del suelo en el rango $[0.0, 120.0]\,m$ (techo aeronáutico regulatorio).
+2. **Nivel de Batería (`bateria`):** Número real en porcentaje delimitado estrictamente en `[0.0, 100.0]%`.
+3. **Límite de Altitud (`altitud`):** Medida en metros sobre el nivel del suelo en el rango `[0.0, 120.0] m` (techo aeronáutico regulatorio).
 4. **Coherencia de Motores vs Altitud:**
-   - Si $\text{altitud} > 0.0\,m \implies \text{estado\_motores}$ debe ser obligatoriamente `'EN_VUELO'`.
-   - Si $\text{altitud} == 0.0\,m$ (en tierra) $\implies \text{estado\_motores}$ no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
+   - Si `altitud > 0.0 m`: `estado_motores` debe ser obligatoriamente `'EN_VUELO'`.
+   - Si `altitud == 0.0 m` (en tierra): `estado_motores` no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
    - El conjunto de estados válidos para los motores es estrictamente: `{'APAGADOS', 'STANDBY', 'EN_VUELO', 'EMERGENCIA'}`.
-5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos números reales $(\text{latitud}, \text{longitud})$ con $\text{latitud} \in [-90.0, 90.0]$ y $\text{longitud} \in [-180.0, 180.0]$.
-6. **Cálculo Geodésico:** La distancia a un destino geográfico se calcula mediante la fórmula de Haversine asumiendo un radio terrestre de $6371.0\,km$.
+5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos números reales `(latitud, longitud)` con latitud en `[-90.0, 90.0]` y longitud en `[-180.0, 180.0]`.
+6. **Cálculo Geodésico:** La distancia a un destino geográfico se calcula mediante la fórmula de Haversine asumiendo un radio terrestre de 6371.0 km.
 
 ---
 
@@ -42,7 +42,7 @@
 * **Nombre:** Calcular Distancia Ortodrómica a Destino
 * **Resumen:** **Actor:** Operador de Vuelo. Calcula la distancia geodésica en kilómetros entre la ubicación actual del dron y una coordenada objetivo utilizando la fórmula de Haversine.
 * **Entradas:** Coordenada objetivo `destino` como `(latitud, longitud)` (tuple[float, float]).
-* **Resultado:** Número flotante (`float`) representando la distancia estimada en kilómetros ($km$).
+* **Resultado:** Número flotante (`float`) representando la distancia estimada en kilómetros (km).
 
 ---
 

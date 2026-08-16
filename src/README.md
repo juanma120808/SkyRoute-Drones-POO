@@ -102,8 +102,8 @@ from src import TelemetriaDrone, CalculadorGeodesico, BateriaInvalidaError
   1. El código de telemetría queda limpio y fácil de leer.
   2. La fórmula de Haversine puede ser reutilizada en el futuro por cualquier otra clase (por ejemplo, para calcular la longitud total de una ruta).
 * **Métodos clave:**
-  * `validar_coordenada(coordenada)`: Verifica que la tupla sea `(lat, lon)` con números reales y dentro de $[-90, 90]$ y $[-180, 180]$.
-  * `calcular_haversine(origen, destino)`: Aplica la fórmula trigonométrica usando el radio terrestre ($6371.0\,\text{km}$).
+  * `validar_coordenada(coordenada)`: Verifica que la tupla sea `(lat, lon)` con números reales y dentro de `[-90.0, 90.0]` y `[-180.0, 180.0]`.
+  * `calcular_haversine(origen, destino)`: Aplica la fórmula trigonométrica usando el radio terrestre (6371.0 km).
 
 ---
 
@@ -113,10 +113,10 @@ from src import TelemetriaDrone, CalculadorGeodesico, BateriaInvalidaError
   Todos los atributos internos son privados (inician con guión bajo: `_id_dron`, `_bateria`, `_altitud`, `_estado_motores`, `_coordenadas`). El acceso se realiza exclusivamente mediante decoradores `@property` (getters) y sus respectivos setters.
 * **Reglas y Validaciones que Aplica:**
   1. **Tipos estrictos:** Se rechaza explícitamente el tipo `bool` (porque en Python `bool` es subclase de `int`).
-  2. **Rangos numéricos:** Batería en $[0.0, 100.0]\%$, Altitud en $[0.0, 120.0]\,\text{m}$.
+  2. **Rangos numéricos:** Batería en `[0.0, 100.0]%`, Altitud en `[0.0, 120.0] m`.
   3. **Coherencia de Motores vs Altitud:**
-     - Si $\text{altitud} > 0.0\,\text{m} \implies \text{motores} == \text{'EN\_VUELO'}$.
-     - Si $\text{altitud} == 0.0\,\text{m} \implies \text{motores} \in \{\text{'APAGADOS'}, \text{'STANDBY'}, \text{'EMERGENCIA'}\}$.
+     - Si `altitud > 0.0 m`: `estado_motores` debe ser obligatoriamente `'EN_VUELO'`.
+     - Si `altitud == 0.0 m` (en tierra): `estado_motores` no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
   4. **Delegación Geodésica:** Al llamar a `dron.calcular_distancia_a_punto(destino)`, el dron le delega el cálculo matemático a `CalculadorGeodesico.calcular_haversine()`.
 
 ---

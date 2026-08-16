@@ -28,7 +28,7 @@ En operaciones de vuelo, la validez de los datos recibidos es fundamental. El so
 |---|---|---|---|---|
 | **RF-01** | Validar e Instanciar Trama de Telemetría | **Actor:** Sensor / Operador.<br>Recibe los datos de telemetría de un dron, aplica validaciones de tipo, rango y coherencia, e instanciación del objeto. | `id_dron` (str), `bateria` (float), `altitud` (float), `estado_motores` (str), `coordenadas` (tuple[float, float]) | Objeto `TelemetriaDrone` registrado exitosamente. Si alguna regla falla, se interrumpe la instanciación. |
 | **RF-02** | Notificar Excepciones de Dominio | **Actor:** Sistema / Operador.<br>Identifica lecturas inconsistentes o fuera de norma y genera excepciones específicas con mensajes descriptivos. | Trama de telemetría o valores inválidos pasados por parámetro | Interrupción controlada y lanzamiento de `BateriaInvalidaError`, `AltitudInvalidaError`, `EstadoMotorInvalidoError` o `CoordenadaInvalidaError`. |
-| **RF-03** | Calcular Distancia Ortodrómica a Destino | **Actor:** Operador de Vuelo.<br>Calcula la distancia geodésica en kilómetros desde la posición actual del dron hacia un punto de destino utilizando la fórmula de Haversine. | `destino` (tuple[float, float]) | Número flotante (`float`) representando la distancia estimada en kilómetros ($km$). |
+| **RF-03** | Calcular Distancia Ortodrómica a Destino | **Actor:** Operador de Vuelo.<br>Calcula la distancia geodésica en kilómetros desde la posición actual del dron hacia un punto de destino utilizando la fórmula de Haversine. | `destino` (tuple[float, float]) | Número flotante (`float`) representando la distancia estimada en kilómetros (km). |
 | **RF-04** | Consultar Formato de Consola e Inspección Técnica | **Actor:** Operador / Desarrollador.<br>Genera una representación legible del estado del dron para monitoreo (`__str__`) o depuración técnica (`__repr__`). | Instancia de `TelemetriaDrone` | Cadena de texto formateada con la información consolidada. |
 
 ---
@@ -36,13 +36,13 @@ En operaciones de vuelo, la validez de los datos recibidos es fundamental. El so
 ## 📜 3. Reglas de Negocio del Sistema (Restricciones de Dominio)
 
 1. **Identificador Único (`id_dron`):** Cadena alfanumérica no vacía (`str`).
-2. **Nivel de Batería (`bateria`):** Rango delimitado en $[0.0, 100.0]\%$.
-3. **Límite de Altitud (`altitud`):** Medida en metros, restringida al rango $[0.0, 120.0]\,m$.
+2. **Nivel de Batería (`bateria`):** Rango delimitado en `[0.0, 100.0]%`.
+3. **Límite de Altitud (`altitud`):** Medida en metros, restringida al rango `[0.0, 120.0] m`.
 4. **Coherencia Estado de Motores vs Altitud:**
-   - Si $\text{altitud} > 0.0\,m \implies \text{estado\_motores}$ debe ser obligatoriamente `'EN_VUELO'`.
-   - Si $\text{altitud} == 0.0\,m \implies \text{estado\_motores}$ no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
+   - Si `altitud > 0.0 m`: `estado_motores` debe ser obligatoriamente `'EN_VUELO'`.
+   - Si `altitud == 0.0 m` (en tierra): `estado_motores` no puede ser `'EN_VUELO'` (debe ser `'APAGADOS'`, `'STANDBY'` o `'EMERGENCIA'`).
    - El conjunto de estados válidos es estrictamente: `{'APAGADOS', 'STANDBY', 'EN_VUELO', 'EMERGENCIA'}`.
-5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos reales $(\text{latitud}, \text{longitud})$ con $\text{latitud} \in [-90.0, 90.0]$ y $\text{longitud} \in [-180.0, 180.0]$.
+5. **Coordenadas Geográficas (`coordenadas`):** Tupla de dos números reales `(latitud, longitud)` con latitud en `[-90.0, 90.0]` y longitud en `[-180.0, 180.0]`.
 
 ---
 
@@ -51,7 +51,7 @@ En operaciones de vuelo, la validez de los datos recibidos es fundamental. El so
 | Entidad / Clase | Responsabilidades | Colaboradores | Información que Administra |
 |---|---|---|---|
 | **`TelemetriaDrone`** | 1. Encapsular la información de telemetría del dron.<br>2. Validar cada atributo durante la instanciación y modificación.<br>3. Evaluar la coherencia de estado entre altitud y motores.<br>4. Delegar el cálculo ortodrómico a `CalculadorGeodesico`.<br>5. Proveer representaciones textuales para consola y depuración. | `CalculadorGeodesico`<br>`TelemetriaError` (y subclases) | `_id_dron`: str<br>`_bateria`: float<br>`_altitud`: float<br>`_estado_motores`: str<br>`_coordenadas`: tuple[float, float] |
-| **`CalculadorGeodesico`** | 1. Validar formato y límites geográficos.<br>2. Ejecutar la fórmula de Haversine ($R = 6371.0\,km$). | `CoordenadaInvalidaError` | Constantes de radio terrestre y límites de coordenadas |
+| **`CalculadorGeodesico`** | 1. Validar formato y límites geográficos.<br>2. Ejecutar la fórmula de Haversine (Radio terrestre = 6371.0 km). | `CoordenadaInvalidaError` | Constantes de radio terrestre y límites de coordenadas |
 | **`TelemetriaError` (y Subclases)** | 1. Interrumpir la ejecución de manera controlada.<br>2. Proporcionar mensajes claros especificando el valor y la regla infringida. | `ValueError` (Python standard) | `message`: str |
 
 ---
